@@ -1,11 +1,10 @@
-window.addEventListener('DOMContentLoaded', () => {
-  const replaceText = (selector, text) => {
-    const element = document.getElementById(selector)
-    if (element) element.innerText = text
-  }
+const {ipcRenderer, contextBridge} = require("electron")
 
-  for (const type of ['chrome', 'node', 'electron']) {
-    replaceText(`${type}-version`, process.versions[type])
+contextBridge.exposeInMainWorld('electron', {
+  notificationsAPI: {
+    sendNotification(message) {
+      console.log(message);
+      ipcRenderer.send("notify", message);
+    }
   }
 })
-
